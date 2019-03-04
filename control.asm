@@ -99,10 +99,24 @@ done:
     mov rsi, cntrld
     call printf
 
+    mov r8, 0
+    
+    try:
+
+        cmp r8, r13
+        jge next
+
+        sub r14, 8
+        inc r8
+        jmp try
+
+
+
+    next:
     ; moves r14 (array) into rdi for function call
     ; moves r13 (counter / size) into rsi for function call
     mov rdi, r14
-    mov rsi, [r13] ; not sure if the brackets need to be here
+    mov rsi, r13 ; not sure if the brackets need to be here
     call display
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
