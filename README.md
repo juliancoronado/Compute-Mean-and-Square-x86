@@ -4,7 +4,7 @@ assignment by Julian Coronado
 
 Files in this assignment / repo include:
 + driver.cpp
-+ display.cpp (needs to be C file - writing it in C++ for now)
++ display.c
 + square.cpp
 + control.asm
 + compute_mean.asm
