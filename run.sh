@@ -30,5 +30,5 @@ g++ -m64 -o arrays.out control.o compute_mean.o driver.o square.o display.o -fno
 
 echo "The bash script has finished successfully and is now closing.\n"
 
-# Executes
+# Executes .out file
 ./arrays.out
