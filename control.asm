@@ -99,25 +99,9 @@ done:
     mov rsi, cntrld
     call printf
 
-    ; new counter
-    mov r8, 0
-    
-    reset:
-        ; compare r8 counter to the amount of user inputs
-        cmp r8, r13
-        ; if r8 greater or equal, go to next
-        ; if not, continue below
-        jge next
-
-        ; decrease address to return to beginning (once loop completes)
-        sub r14, 8
-        inc r8
-        jmp reset
-
-    next:
-    ; moves r14 (array) into rdi for function call
+    ; moves arr into rdi for function call
     ; moves r13 (counter / size) into rsi for function call
-    mov rdi, r14
+    mov rdi, arr
     mov rsi, r13
     call display
 
