@@ -28,6 +28,7 @@ inputformat db "%ld", 0                                     ; General integer fo
 
 segment .bss                                                ; Place un-initialized data here.
 
+; array will hold 20 spaces, as default
 arr resq 20
 
 ; ===== EXECUTABLE INSTRUCTIONS ============================================================================================================================================
@@ -57,39 +58,51 @@ pushf                                                       ; Back up rflags
 
 ; ===== END OF BACK UP REGISTERS ===========================================================================================================================================
 
+; r13 register is the counter
 mov r13, 0
+; r14 register will hold the array address
 mov r14, arr
 
 loop:
+    ; compares counter to number 20
+    ; if r13 is greater or equal to 20, it'll jump to done
+    ; if not continue below
     cmp r13, 20
     jge done
 
+    ; prints out prompt for user to enter integer
     mov rax, 0
     mov rdi, stringformat
     mov rsi, prompt
     call printf
 
+    ; scans in user input and stores it into r14
     mov rax, 0
     mov rdi, inputformat
     mov rsi, r14
     call scanf
 
+    ; checks if user has entered cntrl d, if so jump to done
     cmp eax, -1
     je done
 
+    ; increases counter and moves array up an address
     inc r13
     add r14, 8
     jmp loop
 
 done:
 
+    ; prints out [cntrl+d] to indicate user have entered that keypress
     mov rax, 0
     mov rdi, stringformat
     mov rsi, cntrld
     call printf
 
+    ; moves r14 (array) into rdi for function call
+    ; moves r13 (counter / size) into rsi for function call
     mov rdi, r14
-    mov rsi, [r13]
+    mov rsi, [r13] ; not sure if the brackets need to be here
     call display
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
