@@ -22,8 +22,8 @@ g++ -c -m64 -Wall -l driver.lis -o driver.o driver.cpp -fno-pie -no-pie
 # Compile the C++ module square.cpp
 g++ -c -m64 -Wall -l square.lis -o square.o square.cpp -fno-pie -no-pie
 
-# Compile the C module display.cpp
-g++ -c -m64 -Wall -l display.lis -o display.o display.cpp -fno-pie -no-pie
+# Compile the C module display.c
+g++ -c -m64 -Wall -l display.lis -o display.o display.c -fno-pie -no-pie
 
 # Link the object files already created
 g++ -m64 -o arrays.out control.o compute_mean.o driver.o square.o display.o -fno-pie -no-pie

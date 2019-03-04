@@ -93,7 +93,7 @@ loop:
 
 done:
 
-    ; prints out [cntrl+d] to indicate user have entered that keypress
+    ; prints out [cntrl+d] to indicate user have entered that key combo
     mov rax, 0
     mov rdi, stringformat
     mov rsi, cntrld
@@ -105,6 +105,7 @@ done:
     mov rsi, r13
     call display
 
+    ; function display will put data in rax, this clears it
     mov rax, 0
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
