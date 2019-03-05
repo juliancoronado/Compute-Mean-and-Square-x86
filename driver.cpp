@@ -14,18 +14,19 @@
 #include <cstring>
 
 // enables function in assembly file
-extern "C" long int control();
+extern "C" double control();
 
 int main(){
-    long int return_code = 0;
+    double answer;
     printf("%s", "Welcome to Arrays!\n");
     printf("%s", "This program is brought to you by Julian Coronado.\n");
     
     // calls function control() 
-    return_code = control();
+    answer = control();
     
-    printf("%s%ld%s\n","The driver received the number: ", return_code,
-        ".\nMain will now return 0 to the OS. Have a nice day!");
+    printf("%s", "The driver received this number: ");
+    printf("%lf\n", answer);
+    printf("%s\n", "The program has completed! Have a nice day!");
         
     return 0;
 

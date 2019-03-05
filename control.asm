@@ -22,10 +22,11 @@ segment .data                                               ; Place initialized 
 
 prompt db "Enter an integer: ", 0
 cntrld db "[control + d]", 10, 0
-emptyline db "---", 10, 0
+emptyline db "- - -", 10, 0
 
 stringformat db "%s", 0                                     ; General string format
 inputformat db "%ld", 0                                     ; General integer format
+floatformat db "The mean of those numbers is %f", 10, 0
 
 ; ===== UNINITIALIZED DATA =================================================================================================================================================
 
@@ -102,7 +103,7 @@ done:
     mov rsi, cntrld
     call printf
 
-    ; moves arr into rdi for function call
+    ; moves arr into rdi for function call, displays array
     ; moves r13 (counter / size) into rsi for function call
     mov rdi, arr
     mov rsi, r13
@@ -111,22 +112,32 @@ done:
     ; function display will put data in rax, this clears it
     mov rax, 0
 
+    ; prints "---"
     mov rdi, stringformat
     mov rsi, emptyline
     call printf
 
+    ; calls compute_mean
     mov rdi, arr
     mov rsi, r13
     call compute_mean
 
+    mov rax, 1
+    mov rdi, floatformat
+    ; nasm knows that xmm0 is going to be used
+    call printf
+
+    ; squares all numbers in array
     mov rdi, arr
     mov rsi, r13
     call square
 
+    ; prints "---"
     mov rdi, stringformat
     mov rsi, emptyline
     call printf
 
+    ; displays array again
     mov rdi, arr
     mov rsi, r13
     call display

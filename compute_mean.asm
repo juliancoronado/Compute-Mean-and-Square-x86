@@ -17,7 +17,7 @@ global compute_mean                                              ; This makes "c
 
 segment .data                                               ; Place initialized data here
 
-meantext db "The mean of those numbers is: ", 0
+mean_output db "The mean of those numbers is: ", 0
 
 stringformat db "%s", 0                                     ; General string format
 inputformat db "%ld", 10, 0                                     ; General integer format
@@ -54,10 +54,13 @@ pushf                                                       ; Back up rflags
 
 ; ===== END OF BACK UP REGISTERS ===========================================================================================================================================
 
-mov r14, rdi ; array
-mov r13, rsi ; size
-
-mov r8, 0 ; will hold sum
+; rdi holds array, moving it into r14
+mov r14, rdi
+; rsi holds array_size, moves it into r13
+mov r13, rsi
+mov r15, rsi
+; r8 will hold sum of array
+mov r8, 0
 
 sum_loop:
     cmp r13, 0
@@ -69,26 +72,17 @@ sum_loop:
     jmp sum_loop
 
 sum_done:
-    ; sum is in r8
 
-    mov rax, r8 ; moves sum into rax
-    cqo ; extends rax to rdx:rax
-    idiv rsi ; divids rax by rsi (which holds array size)
-    mov r9, rax ; moves quotient into r9
-    
-    mov rax, 0
-    mov rdi, stringformat
-    mov rsi, meantext
-    call printf
+    ; convert to double --- convert scalar integer 2 scalar double
+    cvtsi2sd xmm3, r8
+    cvtsi2sd xmm4, r15
 
-    mov rax, 0
-    mov rdi, inputformat
-    mov rsi, r9
-    call printf
+    ; scalar double (64 bits)
+    divsd xmm3, xmm4
+    ; xmm3 has the mean
 
-    mov rax, 0
-
-
+    ; returns xmm0 to the calling function
+    movsd xmm0, xmm3
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
 
