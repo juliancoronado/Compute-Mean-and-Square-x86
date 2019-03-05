@@ -13,6 +13,7 @@ extern printf                                               ; External C++ funct
 extern scanf                                                ; External C++ function for reading from the standard input device
 extern display
 global control                                              ; This makes "control" callable by functions outside of this file.
+extern square
 
 ; ===== INITIALIZED DATA ===================================================================================================================================================
 
@@ -20,6 +21,7 @@ segment .data                                               ; Place initialized 
 
 prompt db "Enter an integer: ", 0
 cntrld db "[control + d]", 10, 0
+emptyline db "---", 10, 0
 
 stringformat db "%s", 0                                     ; General string format
 inputformat db "%ld", 0                                     ; General integer format
@@ -107,6 +109,18 @@ done:
 
     ; function display will put data in rax, this clears it
     mov rax, 0
+
+    mov rdi, arr
+    mov rsi, r13
+    call square
+
+    mov rdi, stringformat
+    mov rsi, emptyline
+    call printf
+
+    mov rdi, arr
+    mov rsi, r13
+    call display
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
 

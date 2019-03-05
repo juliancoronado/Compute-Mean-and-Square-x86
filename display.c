@@ -7,7 +7,7 @@
 
 extern "C" void display(long[], long);
 
-// this funciton call gives me a segementation fault (core dumped) error
+// this funciton will print every value in array
 void display(long arr[], long size) {
 
     for (long i = 0; i < size; i++) {
