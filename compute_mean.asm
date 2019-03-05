@@ -17,8 +17,11 @@ global compute_mean                                              ; This makes "c
 
 segment .data                                               ; Place initialized data here
 
+meantext db "The mean of those numbers is: ", 0
+
 stringformat db "%s", 0                                     ; General string format
-inputformat db "%ld", 0                                     ; General integer format
+inputformat db "%ld", 10, 0                                     ; General integer format
+floatformat db "%f", 10, 0
 
 ; ===== UNINITIALIZED DATA =================================================================================================================================================
 
@@ -50,6 +53,40 @@ push       r15                                              ; Back up r15
 pushf                                                       ; Back up rflags
 
 ; ===== END OF BACK UP REGISTERS ===========================================================================================================================================
+
+mov r14, rdi ; array
+mov r13, rsi ; size
+
+mov r8, 0 ; will hold sum
+
+sum_loop:
+    cmp r13, 0
+    je sum_done
+
+    add r8, [r14]
+    dec r13
+    add r14, 8
+    jmp sum_loop
+
+sum_done:
+    ; sum is in r8
+
+    mov rax, r8 ; moves sum into rax
+    cqo ; extends rax to rdx:rax
+    idiv rsi ; divids rax by rsi (which holds array size)
+    mov r9, rax ; moves quotient into r9
+    
+    mov rax, 0
+    mov rdi, stringformat
+    mov rsi, meantext
+    call printf
+
+    mov rax, 0
+    mov rdi, inputformat
+    mov rsi, r9
+    call printf
+
+    mov rax, 0
 
 
 

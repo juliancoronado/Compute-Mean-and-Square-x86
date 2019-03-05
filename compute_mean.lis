@@ -1,0 +1,119 @@
+     1                                  ; Author name: Julian Coronado
+     2                                  ; Program title: Arrays
+     3                                  ; Files in this program: driver.cpp, control.asm, square.cpp, display.c, compute_mean.asm, run.sh
+     4                                  ; Course number: CPSC 240
+     5                                  ; Assignment number: 3
+     6                                  ; Required delivery date: Mar 7, 2019 before 11:59pm
+     7                                  ; Purpose: Learn how arrays work and pass them through different files.
+     8                                  ; Language of this module:  X86 with Intel syntax
+     9                                  
+    10                                  ; ===== BEGIN CODE AREA ====================================================================================================================================================
+    11                                  
+    12                                  extern printf                                               ; External C++ function for writing to standard output device
+    13                                  extern scanf                                                ; External C++ function for reading from the standard input device
+    14                                  global compute_mean                                              ; This makes "control" callable by functions outside of this file.
+    15                                  
+    16                                  ; ===== INITIALIZED DATA ===================================================================================================================================================
+    17                                  
+    18                                  segment .data                                               ; Place initialized data here
+    19                                  
+    20 00000000 546865206D65616E20-     meantext db "The mean of those numbers is: ", 0
+    20 00000009 6F662074686F736520-
+    20 00000012 6E756D626572732069-
+    20 0000001B 733A2000           
+    21                                  
+    22 0000001F 257300                  stringformat db "%s", 0                                     ; General string format
+    23 00000022 256C640A00              inputformat db "%ld", 10, 0                                     ; General integer format
+    24 00000027 25660A00                floatformat db "%f", 10, 0
+    25                                  
+    26                                  ; ===== UNINITIALIZED DATA =================================================================================================================================================
+    27                                  
+    28                                  segment .bss                                                ; Place un-initialized data here.
+    29                                  
+    30                                  ; ===== EXECUTABLE INSTRUCTIONS ============================================================================================================================================
+    31                                  
+    32                                  segment .text                                               ; Place executable instructions in this segment.
+    33                                  
+    34                                  compute_mean:                                                    ; Entry point. Execution begins here.
+    35                                  
+    36                                  ; ===== BACK UP REGISTERS ==================================================================================================================================================
+    37                                  
+    38 00000000 55                      push       rbp                                              ; Save a copy of the stack base pointer
+    39 00000001 4889E5                  mov        rbp, rsp                                         ; We do this in order to be 100% compatible with C and C++.
+    40 00000004 53                      push       rbx                                              ; Back up rbx
+    41 00000005 51                      push       rcx                                              ; Back up rcx
+    42 00000006 52                      push       rdx                                              ; Back up rdx
+    43 00000007 56                      push       rsi                                              ; Back up rsi
+    44 00000008 57                      push       rdi                                              ; Back up rdi
+    45 00000009 4150                    push       r8                                               ; Back up r8
+    46 0000000B 4151                    push       r9                                               ; Back up r9
+    47 0000000D 4152                    push       r10                                              ; Back up r10
+    48 0000000F 4153                    push       r11                                              ; Back up r11
+    49 00000011 4154                    push       r12                                              ; Back up r12
+    50 00000013 4155                    push       r13                                              ; Back up r13
+    51 00000015 4156                    push       r14                                              ; Back up r14
+    52 00000017 4157                    push       r15                                              ; Back up r15
+    53 00000019 9C                      pushf                                                       ; Back up rflags
+    54                                  
+    55                                  ; ===== END OF BACK UP REGISTERS ===========================================================================================================================================
+    56                                  
+    57 0000001A 4989FE                  mov r14, rdi ; array
+    58 0000001D 4989F5                  mov r13, rsi ; size
+    59                                  
+    60 00000020 41B800000000            mov r8, 0 ; will hold sum
+    61                                  
+    62                                  sum_loop:
+    63 00000026 4983FD00                    cmp r13, 0
+    64 0000002A 740C                        je sum_done
+    65                                  
+    66 0000002C 4D0306                      add r8, [r14]
+    67 0000002F 49FFCD                      dec r13
+    68 00000032 4983C608                    add r14, 8
+    69 00000036 EBEE                        jmp sum_loop
+    70                                  
+    71                                  sum_done:
+    72                                      ; sum is in r8
+    73                                  
+    74 00000038 4C89C0                      mov rax, r8 ; moves sum into rax
+    75 0000003B 4899                        cqo ; extends rax to rdx:rax
+    76 0000003D 48F7FE                      idiv rsi ; divids rax by rsi (which holds array size)
+    77 00000040 4989C1                      mov r9, rax ; moves quotient into r9
+    78                                      
+    79 00000043 B800000000                  mov rax, 0
+    80 00000048 48BF-                       mov rdi, stringformat
+    80 0000004A [1F00000000000000] 
+    81 00000052 48BE-                       mov rsi, meantext
+    81 00000054 [0000000000000000] 
+    82 0000005C E8(00000000)                call printf
+    83                                  
+    84 00000061 B800000000                  mov rax, 0
+    85 00000066 48BF-                       mov rdi, inputformat
+    85 00000068 [2200000000000000] 
+    86 00000070 4C89CE                      mov rsi, r9
+    87 00000073 E8(00000000)                call printf
+    88                                  
+    89 00000078 B800000000                  mov rax, 0
+    90                                  
+    91                                  
+    92                                  
+    93                                  ; ===== RESTORES REGISTERS =================================================================================================================================================
+    94                                  
+    95 0000007D 9D                      popf                                                        ; Restore rflags
+    96 0000007E 415F                    pop        r15                                              ; Restore r15
+    97 00000080 415E                    pop        r14                                              ; Restore r14
+    98 00000082 415D                    pop        r13                                              ; Restore r13
+    99 00000084 415C                    pop        r12                                              ; Restore r12
+   100 00000086 415B                    pop        r11                                              ; Restore r11
+   101 00000088 415A                    pop        r10                                              ; Restore r10
+   102 0000008A 4159                    pop        r9                                               ; Restore r9
+   103 0000008C 4158                    pop        r8                                               ; Restore r8
+   104 0000008E 5F                      pop        rdi                                              ; Restore rdi
+   105 0000008F 5E                      pop        rsi                                              ; Restore rsi
+   106 00000090 5A                      pop        rdx                                              ; Restore rdx
+   107 00000091 59                      pop        rcx                                              ; Restore rcx
+   108 00000092 5B                      pop        rbx                                              ; Restore rbx
+   109 00000093 5D                      pop        rbp                                              ; Restore rbp
+   110                                  
+   111 00000094 C3                      ret                                                         ; No parameter with this instruction.  This instruction will pop 8 bytes from
+   112                                                                                              ; the integer stack, and jump to the address found on the stack.
+   113                                  ; ===== END OF PROGRAM ====================================================================================================================================================

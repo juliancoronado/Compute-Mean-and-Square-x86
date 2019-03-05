@@ -14,6 +14,7 @@ extern scanf                                                ; External C++ funct
 extern display
 global control                                              ; This makes "control" callable by functions outside of this file.
 extern square
+extern compute_mean
 
 ; ===== INITIALIZED DATA ===================================================================================================================================================
 
@@ -110,6 +111,14 @@ done:
     ; function display will put data in rax, this clears it
     mov rax, 0
 
+    mov rdi, stringformat
+    mov rsi, emptyline
+    call printf
+
+    mov rdi, arr
+    mov rsi, r13
+    call compute_mean
+
     mov rdi, arr
     mov rsi, r13
     call square
@@ -121,6 +130,12 @@ done:
     mov rdi, arr
     mov rsi, r13
     call display
+
+    mov rdi, stringformat
+    mov rsi, emptyline
+    call printf
+
+    mov rax, 0
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
 
