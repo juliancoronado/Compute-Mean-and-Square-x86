@@ -16,7 +16,9 @@
 // enables function in assembly file
 extern "C" double control();
 
-int main(){
+int main() {
+    
+    // answer will recieve control() return value
     double answer = 1.0;
     printf("%s", "Welcome to Arrays!\n");
     printf("%s", "This program is brought to you by Julian Coronado.\n");
@@ -25,8 +27,9 @@ int main(){
     answer = control();
     
     printf("%s", "The driver received this number: ");
+    // prints out mean value from control.asm
     printf("%lf\n", answer);
-    printf("%s\n", "The program has completed! Have a nice day!");
+    printf("%s\n", "The program has completed and will now end. Have a nice day!");
         
     return 0;
 

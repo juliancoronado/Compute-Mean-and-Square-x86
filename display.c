@@ -3,7 +3,7 @@
 #include <ctime>
 #include <cstring>
 
-// not sure which #include statements I really need
+// include statement above were provided by professor's template
 
 extern "C" void display(long[], long);
 

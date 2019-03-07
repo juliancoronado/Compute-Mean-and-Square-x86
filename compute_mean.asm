@@ -63,9 +63,12 @@ mov r15, rsi
 mov r8, 0
 
 sum_loop:
+    ; compares r13 (size) to zero, if equal jump to sum_done
+    ; if not, continue below
     cmp r13, 0
     je sum_done
 
+    ; adds the array value to r8, decreases r13, and moves array up an address
     add r8, [r14]
     dec r13
     add r14, 8
@@ -73,15 +76,17 @@ sum_loop:
 
 sum_done:
 
-    ; convert to double --- convert scalar integer 2 scalar double
+    ; convert to double --- (convert scalar integer 2 scalar double)
+    ; converts size and sum to double values
     cvtsi2sd xmm3, r8
     cvtsi2sd xmm4, r15
 
-    ; scalar double (64 bits)
+    ; divide --- scalar double (64 bits)
     divsd xmm3, xmm4
     ; xmm3 has the mean
 
     ; returns xmm0 to the calling function
+    ; so xmm0 gets the mean value from xmm3
     movsd xmm0, xmm3
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================

@@ -26,7 +26,7 @@ emptyline db "- - -", 10, 0
 
 stringformat db "%s", 0                                     ; General string format
 inputformat db "%ld", 0                                     ; General integer format
-floatformat db "The mean of those numbers is %lf", 10, 0
+mean_output db "The mean of those numbers is %lf", 10, 0
 
 ; ===== UNINITIALIZED DATA =================================================================================================================================================
 
@@ -74,7 +74,7 @@ loop:
     cmp r13, 20
     jge done
 
-    ; prints out prompt for user to enter integer
+    ; prints out prompt for user to enter integer one by one
     mov rax, 0
     mov rdi, stringformat
     mov rsi, prompt
@@ -105,6 +105,7 @@ done:
 
     ; moves arr into rdi for function call, displays array
     ; moves r13 (counter / size) into rsi for function call
+    ; void display(arr[], size)
     mov rdi, arr
     mov rsi, r13
     call display
@@ -115,18 +116,18 @@ done:
     mov rsi, emptyline
     call printf
 
-    ; calls compute_mean
+    ; calls compute_mean passing in array and size
     mov rdi, arr
     mov rsi, r13
     call compute_mean
 
-    ; any register below xmm8 is volatile
+    ; any register below xmm8 is volatile (xmm0 through xmm7)
     ; store xmm0 in xmm15 until the end of the program
     movsd xmm15, xmm0
 
     ; mov rax, 1 so assembler knows to look in xmm0
     mov rax, 1
-    mov rdi, floatformat
+    mov rdi, mean_output
     ; assembler knows that xmm0 is going to be used
     call printf
 
@@ -140,7 +141,7 @@ done:
     mov rsi, emptyline
     call printf
 
-    ; displays array again
+    ; displays array one more time with the squared values
     mov rdi, arr
     mov rsi, r13
     call display
