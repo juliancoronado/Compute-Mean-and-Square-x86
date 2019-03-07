@@ -120,8 +120,11 @@ done:
     mov rsi, r13
     call compute_mean
 
+    ; any register below xmm8 is volatile
+    ; store xmm0 in xmm15 until the end of the program
     movsd xmm15, xmm0
 
+    ; mov rax, 1 so assembler knows to look in xmm0
     mov rax, 1
     mov rdi, floatformat
     ; assembler knows that xmm0 is going to be used
@@ -142,11 +145,13 @@ done:
     mov rsi, r13
     call display
 
+    ; prints "---"
     mov rax, 0
     mov rdi, stringformat
     mov rsi, emptyline
     call printf
 
+    ; moves xmm15 (the mean) back into xmm0 to return the double to the main finally
     movsd xmm0, xmm15
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
