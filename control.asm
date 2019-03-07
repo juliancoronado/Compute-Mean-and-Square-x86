@@ -26,7 +26,7 @@ emptyline db "- - -", 10, 0
 
 stringformat db "%s", 0                                     ; General string format
 inputformat db "%ld", 0                                     ; General integer format
-floatformat db "The mean of those numbers is %f", 10, 0
+floatformat db "The mean of those numbers is %lf", 10, 0
 
 ; ===== UNINITIALIZED DATA =================================================================================================================================================
 
@@ -109,10 +109,8 @@ done:
     mov rsi, r13
     call display
 
-    ; function display will put data in rax, this clears it
-    mov rax, 0
-
     ; prints "---"
+    mov rax, 0
     mov rdi, stringformat
     mov rsi, emptyline
     call printf
@@ -122,9 +120,11 @@ done:
     mov rsi, r13
     call compute_mean
 
+    movsd xmm15, xmm0
+
     mov rax, 1
     mov rdi, floatformat
-    ; nasm knows that xmm0 is going to be used
+    ; assembler knows that xmm0 is going to be used
     call printf
 
     ; squares all numbers in array
@@ -142,11 +142,12 @@ done:
     mov rsi, r13
     call display
 
+    mov rax, 0
     mov rdi, stringformat
     mov rsi, emptyline
     call printf
 
-    mov rax, 0
+    movsd xmm0, xmm15
 
 ; ===== RESTORES REGISTERS =================================================================================================================================================
 

@@ -29,10 +29,10 @@
     26                                  
     27 00000029 257300                  stringformat db "%s", 0                                     ; General string format
     28 0000002C 256C6400                inputformat db "%ld", 0                                     ; General integer format
-    29 00000030 546865206D65616E20-     floatformat db "The mean of those numbers is %f", 10, 0
+    29 00000030 546865206D65616E20-     floatformat db "The mean of those numbers is %lf", 10, 0
     29 00000039 6F662074686F736520-
     29 00000042 6E756D626572732069-
-    29 0000004B 732025660A00       
+    29 0000004B 7320256C660A00     
     30                                  
     31                                  ; ===== UNINITIALIZED DATA =================================================================================================================================================
     32                                  
@@ -122,73 +122,74 @@
    109 0000009B 4C89EE                      mov rsi, r13
    110 0000009E E8(00000000)                call display
    111                                  
-   112                                      ; function display will put data in rax, this clears it
+   112                                      ; prints "---"
    113 000000A3 B800000000                  mov rax, 0
-   114                                  
-   115                                      ; prints "---"
-   116 000000A8 48BF-                       mov rdi, stringformat
-   116 000000AA [2900000000000000] 
-   117 000000B2 48BE-                       mov rsi, emptyline
-   117 000000B4 [2200000000000000] 
-   118 000000BC E8(00000000)                call printf
-   119                                  
-   120                                      ; calls compute_mean
-   121 000000C1 48BF-                       mov rdi, arr
-   121 000000C3 [0000000000000000] 
-   122 000000CB 4C89EE                      mov rsi, r13
-   123 000000CE E8(00000000)                call compute_mean
+   114 000000A8 48BF-                       mov rdi, stringformat
+   114 000000AA [2900000000000000] 
+   115 000000B2 48BE-                       mov rsi, emptyline
+   115 000000B4 [2200000000000000] 
+   116 000000BC E8(00000000)                call printf
+   117                                  
+   118                                      ; calls compute_mean
+   119 000000C1 48BF-                       mov rdi, arr
+   119 000000C3 [0000000000000000] 
+   120 000000CB 4C89EE                      mov rsi, r13
+   121 000000CE E8(00000000)                call compute_mean
+   122                                  
+   123 000000D3 F2440F10F8                  movsd xmm15, xmm0
    124                                  
-   125 000000D3 B801000000                  mov rax, 1
-   126 000000D8 48BF-                       mov rdi, floatformat
-   126 000000DA [3000000000000000] 
-   127                                      ; nasm knows that xmm0 is going to be used
-   128 000000E2 E8(00000000)                call printf
+   125 000000D8 B801000000                  mov rax, 1
+   126 000000DD 48BF-                       mov rdi, floatformat
+   126 000000DF [3000000000000000] 
+   127                                      ; assembler knows that xmm0 is going to be used
+   128 000000E7 E8(00000000)                call printf
    129                                  
    130                                      ; squares all numbers in array
-   131 000000E7 48BF-                       mov rdi, arr
-   131 000000E9 [0000000000000000] 
-   132 000000F1 4C89EE                      mov rsi, r13
-   133 000000F4 E8(00000000)                call square
+   131 000000EC 48BF-                       mov rdi, arr
+   131 000000EE [0000000000000000] 
+   132 000000F6 4C89EE                      mov rsi, r13
+   133 000000F9 E8(00000000)                call square
    134                                  
    135                                      ; prints "---"
-   136 000000F9 48BF-                       mov rdi, stringformat
-   136 000000FB [2900000000000000] 
-   137 00000103 48BE-                       mov rsi, emptyline
-   137 00000105 [2200000000000000] 
-   138 0000010D E8(00000000)                call printf
+   136 000000FE 48BF-                       mov rdi, stringformat
+   136 00000100 [2900000000000000] 
+   137 00000108 48BE-                       mov rsi, emptyline
+   137 0000010A [2200000000000000] 
+   138 00000112 E8(00000000)                call printf
    139                                  
    140                                      ; displays array again
-   141 00000112 48BF-                       mov rdi, arr
-   141 00000114 [0000000000000000] 
-   142 0000011C 4C89EE                      mov rsi, r13
-   143 0000011F E8(00000000)                call display
+   141 00000117 48BF-                       mov rdi, arr
+   141 00000119 [0000000000000000] 
+   142 00000121 4C89EE                      mov rsi, r13
+   143 00000124 E8(00000000)                call display
    144                                  
-   145 00000124 48BF-                       mov rdi, stringformat
-   145 00000126 [2900000000000000] 
-   146 0000012E 48BE-                       mov rsi, emptyline
-   146 00000130 [2200000000000000] 
-   147 00000138 E8(00000000)                call printf
-   148                                  
-   149 0000013D B800000000                  mov rax, 0
-   150                                  
-   151                                  ; ===== RESTORES REGISTERS =================================================================================================================================================
-   152                                  
-   153 00000142 9D                      popf                                                        ; Restore rflags
-   154 00000143 415F                    pop        r15                                              ; Restore r15
-   155 00000145 415E                    pop        r14                                              ; Restore r14
-   156 00000147 415D                    pop        r13                                              ; Restore r13
-   157 00000149 415C                    pop        r12                                              ; Restore r12
-   158 0000014B 415B                    pop        r11                                              ; Restore r11
-   159 0000014D 415A                    pop        r10                                              ; Restore r10
-   160 0000014F 4159                    pop        r9                                               ; Restore r9
-   161 00000151 4158                    pop        r8                                               ; Restore r8
-   162 00000153 5F                      pop        rdi                                              ; Restore rdi
-   163 00000154 5E                      pop        rsi                                              ; Restore rsi
-   164 00000155 5A                      pop        rdx                                              ; Restore rdx
-   165 00000156 59                      pop        rcx                                              ; Restore rcx
-   166 00000157 5B                      pop        rbx                                              ; Restore rbx
-   167 00000158 5D                      pop        rbp                                              ; Restore rbp
-   168                                  
-   169 00000159 C3                      ret                                                         ; No parameter with this instruction.  This instruction will pop 8 bytes from
-   170                                                                                              ; the integer stack, and jump to the address found on the stack.
-   171                                  ; ===== END OF PROGRAM ====================================================================================================================================================
+   145 00000129 B800000000                  mov rax, 0
+   146 0000012E 48BF-                       mov rdi, stringformat
+   146 00000130 [2900000000000000] 
+   147 00000138 48BE-                       mov rsi, emptyline
+   147 0000013A [2200000000000000] 
+   148 00000142 E8(00000000)                call printf
+   149                                  
+   150 00000147 F2410F10C7                  movsd xmm0, xmm15
+   151                                  
+   152                                  ; ===== RESTORES REGISTERS =================================================================================================================================================
+   153                                  
+   154 0000014C 9D                      popf                                                        ; Restore rflags
+   155 0000014D 415F                    pop        r15                                              ; Restore r15
+   156 0000014F 415E                    pop        r14                                              ; Restore r14
+   157 00000151 415D                    pop        r13                                              ; Restore r13
+   158 00000153 415C                    pop        r12                                              ; Restore r12
+   159 00000155 415B                    pop        r11                                              ; Restore r11
+   160 00000157 415A                    pop        r10                                              ; Restore r10
+   161 00000159 4159                    pop        r9                                               ; Restore r9
+   162 0000015B 4158                    pop        r8                                               ; Restore r8
+   163 0000015D 5F                      pop        rdi                                              ; Restore rdi
+   164 0000015E 5E                      pop        rsi                                              ; Restore rsi
+   165 0000015F 5A                      pop        rdx                                              ; Restore rdx
+   166 00000160 59                      pop        rcx                                              ; Restore rcx
+   167 00000161 5B                      pop        rbx                                              ; Restore rbx
+   168 00000162 5D                      pop        rbp                                              ; Restore rbp
+   169                                  
+   170 00000163 C3                      ret                                                         ; No parameter with this instruction.  This instruction will pop 8 bytes from
+   171                                                                                              ; the integer stack, and jump to the address found on the stack.
+   172                                  ; ===== END OF PROGRAM ====================================================================================================================================================

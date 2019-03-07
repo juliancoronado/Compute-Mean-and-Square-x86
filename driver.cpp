@@ -17,7 +17,7 @@
 extern "C" double control();
 
 int main(){
-    double answer;
+    double answer = 1.0;
     printf("%s", "Welcome to Arrays!\n");
     printf("%s", "This program is brought to you by Julian Coronado.\n");
     
