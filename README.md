@@ -17,5 +17,6 @@ Files in this assignment / repo include:
 + run.sh (shell file to compile and execute program)
 
 To compile / run the program, use the following commands in Linux:
-$ sh run.sh
+
+`$ sh run.sh`
 
