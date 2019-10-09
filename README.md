@@ -16,7 +16,7 @@ Files in this assignment / repo include:
 + compute_mean.asm
 + run.sh (shell file to compile and execute program)
 
-To compile / run the program, use the following commands in Linux:
+To compile / run the program have the latest version of NASM installed then use the following commands in Linux:
 
 `$ sh run.sh`
 
